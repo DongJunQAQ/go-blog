@@ -7,7 +7,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func GetUserByName(name string) *models.User {
+func GetUserByName(name string) *models.User { //根据用户名查询用户信息
 	db := ConnectMySQL()
 	var user models.User
 	if err := db.Where("name = ?", name).First(&user).Error; err != nil { //判断查询是否出错，如果有错再判断错误类型

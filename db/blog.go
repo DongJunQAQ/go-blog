@@ -7,7 +7,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func GetBlogById(id uint) *models.Blog {
+func GetBlogById(id uint) *models.Blog { //根据博客id查询博客信息
 	db := ConnectMySQL()
 	var blog models.Blog
 	if err := db.Select("id,user_id,title,article").Where("id = ?", id).First(&blog).Error; err != nil {
@@ -18,7 +18,7 @@ func GetBlogById(id uint) *models.Blog {
 	}
 	return &blog
 }
-func GetBlogByUserIdList(userId uint) []*models.Blog {
+func GetBlogByUserIdList(userId uint) []*models.Blog { //根据用户id查询相关博客信息
 	db := ConnectMySQL()
 	var blogs []*models.Blog
 	if err := db.Select("id,title").Where("user_id = ?", userId).Find(&blogs).Error; err != nil {
