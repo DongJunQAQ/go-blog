@@ -1,7 +1,6 @@
 mysql:
   host: 192.168.246.152
   port: 3306
-  db: goBlog
+  dbname: blog
   user: root
   password: 123456
-  config: charset=utf8&parseTime=True&loc=Local  # 高级配置如charset
