@@ -20,6 +20,7 @@ var (
 )
 
 func init() { //优先执行该函数
+	utils.InitLog("log")
 	myDbLog = ormlog.New( //自定义ORM日志
 		log.New(os.Stdout, "\r\n", log.LstdFlags), //将日志打印至标准输出(终端)，分隔符使用回车换行符，日志记录日期和时间
 		ormlog.Config{ //配置ORM日志
@@ -30,7 +31,6 @@ func init() { //优先执行该函数
 	)
 }
 func CreateMysqlPool(host, user, password, dbname string, port int) *gorm.DB {
-	utils.InitLog("log")
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local", user, password, host, port, dbname) //拼接后返回字符串
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{Logger: myDbLog, PrepareStmt: true})                                //使用我们自定义的ORM日志并启用SQL预编译以提高查询效率，将SQL语句与实际数据分开处理，在预编译阶段SQL语句被解析并生成执行计划而数据输入（参数）是在执行阶段提供的
 	if err != nil {
