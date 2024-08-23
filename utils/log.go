@@ -31,10 +31,10 @@ func InitLog(configFile string) {
 	LogRus.SetFormatter(&logrus.TextFormatter{TimestampFormat: "2006-01-02 15:04:05.000"}) //日志显示时间的格式，显示毫秒
 	logPath := ProjectRootPath + logConf.GetString("file")                                 //设置存放日志的路径
 	logOut, err := rotatelogs.New(                                                         //设置输出日志的相关选项
-		logPath+".%Y%m%d%H",                      //指定日志文件的路径和名称后缀
-		rotatelogs.WithLinkName(logPath),         //为最新的一份日志创建软链接
-		rotatelogs.WithRotationTime(1*time.Hour), //每隔1小时生成一份新的日志
-		rotatelogs.WithMaxAge(7*24*time.Hour))    //只保留最近7天的日志
+		logPath+".%Y%m%d",                         //指定日志文件的路径和名称后缀
+		rotatelogs.WithLinkName(logPath),          //为最新的一份日志创建软链接
+		rotatelogs.WithRotationTime(24*time.Hour), //每隔1天生成一份新的日志
+		rotatelogs.WithMaxAge(7*24*time.Hour))     //只保留最近7天的日志
 	if err != nil {
 		panic(err)
 	}
