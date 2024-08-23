@@ -41,7 +41,7 @@ func CreateMysqlPool(host, user, password, dbname string, port int) *gorm.DB {
 	sqlDB.SetMaxOpenConns(100) //连接池中最多有100个连接
 	sqlDB.SetMaxIdleConns(20)  //连接池中最多保留20个空闲连接，避免有很多空闲连接占用资源
 	utils.LogRus.Infof("已成功连接到MySQL的%s库", dbname)
-	err = db.AutoMigrate(&models.User{}) //迁移，根据结构体创建数据表
+	err = db.AutoMigrate(&models.User{}, &models.Blog{}) //迁移，根据结构体创建数据表
 	if err != nil {
 		utils.LogRus.Panicf("数据迁移失败:%s", err)
 	}
