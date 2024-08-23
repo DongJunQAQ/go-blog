@@ -1,14 +1,16 @@
 package models
 
 import (
-	"gorm.io/gorm"
+	"time"
 )
 
 type Blog struct {
-	gorm.Model
-	UserID  int    `gorm:"not null;index:idx_user"`
-	Title   string `gorm:"size:100;not null"`
-	Article string `gorm:"type:text;not null"` //博客正文
+	ID         uint   `gorm:"primaryKey;autoIncrement"`
+	UserID     int    `gorm:"not null;index:idx_user"`
+	Title      string `gorm:"size:100;not null"`
+	Article    string `gorm:"type:text;not null"` //博客正文
+	CreateTime time.Time
+	UpdateTime time.Time `gorm:"autoUpdateTime"`
 }
 
 func (Blog) TableName() string {
