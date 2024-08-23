@@ -4,6 +4,7 @@ import (
 	"GoBlog/models"
 	"GoBlog/utils"
 	"errors"
+	"fmt"
 	"gorm.io/gorm"
 )
 
@@ -28,4 +29,14 @@ func GetBlogByUserIdList(userId uint) []*models.Blog { //根据用户id查询相
 		return nil
 	}
 	return blogs
+}
+func UpdateBlog(blog *models.Blog) error { //根据博客ID来修改博客的标题和正文
+	if blog.ID <= 0 {
+		return fmt.Errorf("无效的博客ID:%d", blog.ID)
+	}
+	if len(blog.Article) == 0 || len(blog.Title) == 0 {
+		return fmt.Errorf("博客的内容或标题不可修改为空")
+	}
+	db := ConnectMySQL()
+	return db.Model(models.Blog{}).Where("id=?", blog.ID).Updates(map[string]any{"title": blog.Title, "article": blog.Article}).Error
 }

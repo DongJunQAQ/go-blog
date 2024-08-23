@@ -2,7 +2,9 @@ package test
 
 import (
 	"GoBlog/db"
+	"GoBlog/models"
 	"GoBlog/utils"
+	"fmt"
 	"testing"
 )
 
@@ -21,5 +23,12 @@ func TestBlogByUserIdList(t *testing.T) {
 	if blogs == nil {
 		t.Fail()
 		return
+	}
+}
+func TestUpdateBlog(t *testing.T) {
+	blog := models.Blog{ID: 1, Title: "新标题123", Article: "新正文456"}
+	if err := db.UpdateBlog(&blog); err != nil {
+		fmt.Println(err)
+		t.Fail()
 	}
 }
