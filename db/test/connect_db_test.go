@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestConnectMySQL(t *testing.T) {
+func TestConnectMySQL(t *testing.T) { //使用5个协程去连接MySQL，查看是否只创建了一个连接池
 	const N = 5
 	wg := sync.WaitGroup{}
 	wg.Add(N)
