@@ -2,7 +2,7 @@ package utils
 
 import (
 	"fmt"
-	rotatelogs "github.com/lestrrat-go/file-rotatelogs" //输出日志
+	rotatelogs "github.com/lestrrat-go/file-rotatelogs" //日志的输出
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"strings"

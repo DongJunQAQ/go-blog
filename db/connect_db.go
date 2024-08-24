@@ -20,7 +20,7 @@ var (
 )
 
 func init() { //优先执行该函数
-	utils.InitLog("log")
+	utils.InitLog("log")  //初始化自定义的LogRus日志
 	myDbLog = ormlog.New( //自定义ORM日志
 		log.New(os.Stdout, "\r\n", log.LstdFlags), //将日志打印至标准输出(终端)，分隔符使用回车换行符，日志记录日期和时间
 		ormlog.Config{ //配置ORM日志
