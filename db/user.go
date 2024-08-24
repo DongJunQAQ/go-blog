@@ -29,7 +29,7 @@ func CreateUser(name, password string) { //创建用户
 }
 func DeleteUserByName(name string) { //通过用户名删除用户
 	db := ConnectMySQL()
-	if err := db.Where("name = ?", name).Delete(models.User{}).Error; err != nil { //通过models.User{}结构体对应到表名
+	if err := db.Where("name = ?", name).Delete(models.User{}).Error; err != nil { //通过models.User{}结构体获取到对应的表名
 		utils.LogRus.Errorf("删除用户%s失败:%s", name, err)
 	}
 }
