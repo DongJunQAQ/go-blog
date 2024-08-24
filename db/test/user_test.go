@@ -25,3 +25,9 @@ func TestGetUserByName(t *testing.T) {
 		return
 	}
 }
+func TestCreateUser(t *testing.T) {
+	db.CreateUser("董军", "7900802")
+}
+func TestDeleteUserByName(t *testing.T) {
+	db.DeleteUserByName("董军")
+}
