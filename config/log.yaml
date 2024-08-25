@@ -1,2 +1,2 @@
 level: debug
-file: /log/blog.log
+logPath: /log/blog.log
