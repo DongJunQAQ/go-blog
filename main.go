@@ -18,6 +18,7 @@ func main() {
 	router.POST("/login/submit", handler.LoginHandler)
 	router.GET("/blog/list/:uid", handler.BlogListHandler) //:uid为URL中的参数
 	router.GET("/blog/:bid", handler.BlogDetailHandler)
+	router.POST("/blog/update", handler.UpdateBlogHandler)
 	err := router.Run(":8080")
 	if err != nil {
 		utils.LogRus.Errorf("Gin启动失败")
