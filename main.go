@@ -16,6 +16,7 @@ func main() {
 		ctx.HTML(http.StatusOK, "login.html", nil)
 	})
 	router.POST("/login/submit", handler.LoginHandler)
+	router.GET("/blog/list/:uid", handler.BlogListHandler) //:uid为URL中的参数
 	err := router.Run(":8080")
 	if err != nil {
 		utils.LogRus.Errorf("Gin启动失败")
