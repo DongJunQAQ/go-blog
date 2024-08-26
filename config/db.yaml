@@ -1,0 +1,11 @@
+mysql:
+  host: 192.168.246.152
+  port: 3306
+  dbname: blog
+  user: root
+  password: 123456
+redis:
+  host: 192.168.246.152
+  port: 6379
+  db: 0
+  password:

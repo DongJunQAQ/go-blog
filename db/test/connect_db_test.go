@@ -18,3 +18,16 @@ func TestConnectMySQL(t *testing.T) { //使用5个协程去连接MySQL，查看�
 	}
 	wg.Wait() //在主协程中等这几个子协程结束
 }
+
+func TestConnectRedis(t *testing.T) {
+	const N = 5
+	wg := sync.WaitGroup{}
+	wg.Add(N)
+	for i := 0; i < N; i++ {
+		go func() {
+			defer wg.Done()
+			db.ConnectRedis()
+		}()
+	}
+	wg.Wait()
+}
