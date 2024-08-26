@@ -20,6 +20,7 @@ func GetUserByName(name string) *models.User { //根据用户名查询用户信�
 }
 func CreateUser(name, password string) { //创建用户
 	db := ConnectMySQL()
+	password = utils.Md5(password)
 	newUser := models.User{Name: name, Password: password}
 	if err := db.Create(&newUser).Error; err != nil { //而在这里我需要将数据插入数据库并不需要修改newUser这个结构体，为什么这里也需要传入指针呢？这是因为ID字段为自增，Create()函数就会自动为newUser结构体插入id字段，因此该结构体发生了修改，所以需要使用指针
 		utils.LogRus.Errorf("创建用户%s失败:%s", name, err)

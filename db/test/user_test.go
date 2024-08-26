@@ -28,7 +28,6 @@ func TestGetUserByName(t *testing.T) {
 func TestCreateUser(t *testing.T) {
 	name := "董军2"
 	password := "7900802"
-	password = utils.Md5(password)
 	db.CreateUser(name, password)
 }
 func TestDeleteUserByName(t *testing.T) {
