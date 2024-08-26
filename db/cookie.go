@@ -20,13 +20,15 @@ func SetCookieToRedis(cookieValue string, uid uint) { //把Cookie随机字符串
 		utils.LogRus.Infof("用户%d写入Cookie至Redis成功:%s", uid, cookieValue)
 	}
 }
-func GetCookieFromRedis(cookieValue string) (uid uint) { //根据Cookie获取uid
+func GetCookieFromRedis(cookieValue string) (uid string) { //根据Cookie获取uid
 	redisClient := ConnectRedis()
-	if uid, err := redisClient.Get(ctx, KeyPrefix+cookieValue).Result(); err != nil { //判断查询是否出错，如果有错再判断错误类型
-		if !errors.Is(err, redis.Nil) { //如果不是"数据库查询无数据"的错误则打印日志
+	uid, err := redisClient.Get(ctx, KeyPrefix+cookieValue).Result()
+	if err != nil { //判断查询是否出错，如果有错再判断错误类型
+		if !errors.Is(redis.Nil, err) { //如果不是"数据库查询无数据"的错误则打印日志
 			utils.LogRus.Errorf("获取用户%s的验证信息失败:%s", uid, err)
 		}
+	} else {
+		utils.LogRus.Infof("验证信息%s对应的用户为%s", KeyPrefix+cookieValue, uid)
 	}
-	utils.LogRus.Infof("验证信息%s对应的用户为%d", cookieValue, uid)
 	return uid
 }

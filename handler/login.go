@@ -14,7 +14,7 @@ type LoginResponse struct { //返回JSON数据的模板结构体
 	Token string `json:"token"`
 }
 
-const CookieKey = "auth"
+const CookieName = "auth"
 
 func LoginHandler(ctx *gin.Context) { //登录
 	name := ctx.PostForm("user") //从前端传过来的表单中获取数据
@@ -36,11 +36,21 @@ func LoginHandler(ctx *gin.Context) { //登录
 		ctx.JSON(http.StatusForbidden, LoginResponse{4, "密码错误", user.ID, ""})
 		return
 	}
-	cookie := "iY8H5iF5F0s4NG3h6Y54Lp3K"
+	cookie := utils.GenerateCookies(20)
 	db.SetCookieToRedis(cookie, user.ID)
-	ctx.SetCookie(CookieKey, cookie, 86400, "/", "", false, true) //在设置响应内容之前设置Cookie，才能使Cookie被写入到浏览器
+	ctx.SetCookie(CookieName, cookie, 86400, "/", "", false, true) //在设置响应内容之前设置Cookie，才能使Cookie被写入到浏览器
 	//Secure:指示Cookie是否仅限于HTTPS连接，如果为false则通过HTTP连接发送
 	//HttpOnly:指示Cookie是否仅限于HTTP请求，即不允许通过JavaScript访问
 	ctx.JSON(http.StatusOK, LoginResponse{0, "登陆成功", user.ID, ""})
 	utils.LogRus.Infof("用户%s(%d)登录成功", name, user.ID)
+}
+func GetUidFromCookie(ctx *gin.Context) string {
+	for _, cookie := range ctx.Request.Cookies() {
+		if cookie.Name == CookieName {
+			if uid := db.GetCookieFromRedis(cookie.Value); uid != "" {
+				return uid
+			}
+		}
+	}
+	return ""
 }

@@ -12,7 +12,7 @@ func TestSetCookie(t *testing.T) {
 	db.SetCookieToRedis(cookieValue, uint(uid))
 }
 func TestGetCookie(t *testing.T) {
-	cookieValue := "auth_cookie_qwe11"
+	cookieValue := "iY8H5iF5F0s4NG3h6Y54Lp3K"
 	uid := db.GetCookieFromRedis(cookieValue)
 	fmt.Println(uid)
 }
