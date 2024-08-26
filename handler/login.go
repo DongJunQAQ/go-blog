@@ -39,6 +39,8 @@ func LoginHandler(ctx *gin.Context) { //登录
 	cookie := "iY8H5iF5F0s4NG3h6Y54Lp3K"
 	db.SetCookieToRedis(cookie, user.ID)
 	ctx.SetCookie(CookieKey, cookie, 86400, "/", "", false, true) //在设置响应内容之前设置Cookie，才能使Cookie被写入到浏览器
+	//Secure:指示Cookie是否仅限于HTTPS连接，如果为false则通过HTTP连接发送
+	//HttpOnly:指示Cookie是否仅限于HTTP请求，即不允许通过JavaScript访问
 	ctx.JSON(http.StatusOK, LoginResponse{0, "登陆成功", user.ID, ""})
 	utils.LogRus.Infof("用户%s(%d)登录成功", name, user.ID)
 }
