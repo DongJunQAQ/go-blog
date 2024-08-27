@@ -40,3 +40,12 @@ func UpdateBlog(blog *models.Blog) error { //根据博客ID来修改博客的标
 	db := ConnectMySQL()
 	return db.Model(models.Blog{}).Where("id=?", blog.ID).Updates(map[string]any{"title": blog.Title, "article": blog.Article}).Error
 }
+func CreateBlog(userId uint, title, article string) { //创建新博客
+	db := ConnectMySQL()
+	newBlog := models.Blog{UserID: userId, Title: title, Article: article}
+	if err := db.Create(&newBlog).Error; err != nil {
+		utils.LogRus.Errorf("创建博客%s失败:%s", title, err)
+	} else {
+		utils.LogRus.Infof("创建博客%s成功，博客ID为%d", title, newBlog.ID)
+	}
+}

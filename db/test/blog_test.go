@@ -32,3 +32,6 @@ func TestUpdateBlog(t *testing.T) {
 		t.Fail()
 	}
 }
+func TestCreateBlog(t *testing.T) {
+	db.CreateBlog(1, "qwe", "qwe")
+}
