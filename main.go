@@ -2,6 +2,7 @@ package main
 
 import (
 	"GoBlog/handler"
+	"GoBlog/middleware"
 	"GoBlog/utils"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -16,9 +17,9 @@ func main() {
 		ctx.HTML(http.StatusOK, "login.html", nil)
 	})
 	router.POST("/login/submit", handler.LoginHandler)
-	router.GET("/blog/list/:uid", handler.BlogListHandler) //:uid为URL中的参数
-	router.GET("/blog/:bid", handler.BlogDetailHandler)
-	router.POST("/blog/update", handler.UpdateBlogHandler)
+	router.GET("/blog/list/:uid", middleware.Auth, handler.BlogListHandler) //:uid为URL中的参数，使用中间件来验证Cookie，用户请求该路由时会先执行middleware.Auth中间件再执行处理程序
+	router.GET("/blog/:bid", middleware.Auth, handler.BlogDetailHandler)    //中间件就是在处理程序之前需要执行的handler
+	router.POST("/blog/update", middleware.Auth, handler.UpdateBlogHandler)
 	err := router.Run(":8080")
 	if err != nil {
 		utils.LogRus.Errorf("Gin启动失败")
