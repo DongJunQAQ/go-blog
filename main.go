@@ -5,11 +5,16 @@ import (
 	"GoBlog/middleware"
 	"GoBlog/utils"
 	"github.com/gin-gonic/gin"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"net/http"
 )
 
 func main() {
 	router := gin.Default()
+	router.Use(middleware.Metric())                 //全局中间件，每个handler执行之前都会执行该中间件
+	router.GET("/metrics", func(ctx *gin.Context) { //该路由用来暴露Prometheus的指标数据
+		promhttp.Handler().ServeHTTP(ctx.Writer, ctx.Request)
+	})
 	router.Static("/js", "view/js")                                                  //当用户访问http://yourdomain/js时，服务器会返回view/js目录下的所有文件
 	router.StaticFile("/favicon.ico", "view/img/dqq.png")                            //当有请求访问/favicon.ico时，服务器会返回view/img/dqq.png这个文件
 	router.LoadHTMLFiles("view/login.html", "view/blog_list.html", "view/blog.html") //加载HTML文件
