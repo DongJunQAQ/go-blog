@@ -5,6 +5,7 @@ import (
 	"GoBlog/utils"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"time"
 )
 
 type LoginResponse struct { //返回JSON数据的模板结构体
@@ -36,21 +37,21 @@ func LoginHandler(ctx *gin.Context) { //登录
 		ctx.JSON(http.StatusForbidden, LoginResponse{4, "密码错误", user.ID, ""})
 		return
 	}
-	cookie := utils.GenerateCookies(20)
-	db.SetCookieToRedis(cookie, user.ID)
-	ctx.SetCookie(CookieName, cookie, 86400, "/", "", false, true) //在设置响应内容之前设置Cookie，才能使Cookie被写入到浏览器
+	payload := utils.JwtPayload{Sub: "auth", Uid: user.ID, Iat: int(time.Now().Unix())}
+	token, _ := utils.GenerateJWT(utils.DefaultHeader, payload, utils.Secret)
+	ctx.SetCookie(CookieName, token, 86400, "/", "", false, true) //在设置响应内容之前设置Cookie，才能使Cookie被写入到浏览器
 	//Secure:指示Cookie是否仅限于HTTPS连接，如果为false则通过HTTP连接发送
 	//HttpOnly:指示Cookie是否仅限于HTTP请求，即不允许通过JavaScript访问
 	ctx.JSON(http.StatusOK, LoginResponse{0, "登陆成功", user.ID, ""})
 	utils.LogRus.Infof("用户%s(%d)登录成功", name, user.ID)
 }
-func GetUidFromCookie(ctx *gin.Context) string {
+func GetUidFromCookie(ctx *gin.Context) uint { //JWT会被保存到客户端，因此无需将其写入Redis数据库
 	for _, cookie := range ctx.Request.Cookies() {
 		if cookie.Name == CookieName {
-			if uid := db.GetCookieFromRedis(cookie.Value); uid != "" {
-				return uid
+			if _, payload, err := utils.VerifyJWT(cookie.Value, utils.Secret); err == nil {
+				return payload.Uid
 			}
 		}
 	}
-	return ""
+	return 0
 }

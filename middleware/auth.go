@@ -7,7 +7,7 @@ import (
 )
 
 func Auth(ctx *gin.Context) {
-	if cookieUid := handler.GetUidFromCookie(ctx); cookieUid != "" {
+	if cookieUid := handler.GetUidFromCookie(ctx); cookieUid != 0 {
 		ctx.Next() //如果符合上面的条件则继续执行后续的中间件或处理程序
 	} else {
 		ctx.String(http.StatusForbidden, "请先登录")
