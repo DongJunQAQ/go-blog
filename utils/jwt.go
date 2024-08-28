@@ -12,9 +12,9 @@ type JwtHeader struct {
 	Typ string `json:"typ"`
 }
 type JwtPayload struct {
-	Sub  string `json:"sub"` //主题
-	Name string `json:"name"`
-	Iat  int    `json:"iat"` //发布时间戳
+	Sub string `json:"sub"` //主题
+	Uid uint   `json:"uid"`
+	Iat int    `json:"iat"` //发布时间戳
 }
 
 var (
