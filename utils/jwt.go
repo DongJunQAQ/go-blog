@@ -4,7 +4,9 @@ import (
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/base64"
+	"fmt"
 	"github.com/bytedance/sonic"
+	"strings"
 )
 
 type JwtHeader struct {
@@ -41,4 +43,33 @@ func GenerateJWT(header JwtHeader, payload JwtPayload, secret string) (string, e
 	h.Write([]byte(part1 + "." + part2))                         //将Base64编码后的header.payload写入HMAC对象
 	signature = base64.RawURLEncoding.EncodeToString(h.Sum(nil)) //进行加密并将加密后的密文Base64编码
 	return part1 + "." + part2 + "." + signature, nil
+}
+func VerifyJWT(token, secret string) (*JwtHeader, *JwtPayload, error) {
+	parts := strings.Split(token, ".")
+	if len(parts) != 3 {
+		return nil, nil, fmt.Errorf("无效token，只有%d部分", len(parts))
+	}
+	h := hmac.New(sha256.New, []byte(secret))
+	h.Write([]byte(parts[0] + "." + parts[1]))
+	signature := base64.RawURLEncoding.EncodeToString(h.Sum(nil))
+	if signature != parts[2] {
+		return nil, nil, fmt.Errorf("验证失败")
+	}
+	var part1, part2 []byte
+	var err error
+	if part1, err = base64.RawURLEncoding.DecodeString(parts[0]); err != nil {
+		return nil, nil, fmt.Errorf("header Base64反解失败")
+	}
+	if part2, err = base64.RawURLEncoding.DecodeString(parts[1]); err != nil {
+		return nil, nil, fmt.Errorf("payload Base64反解失败")
+	}
+	var header JwtHeader
+	var payload JwtPayload
+	if err = sonic.Unmarshal(part1, &header); err != nil {
+		return nil, nil, fmt.Errorf("header JSON反序列化失败")
+	}
+	if err = sonic.Unmarshal(part2, &payload); err != nil {
+		return nil, nil, fmt.Errorf("payload JSON反序列化失败")
+	}
+	return &header, &payload, nil
 }
