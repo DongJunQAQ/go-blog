@@ -30,7 +30,7 @@ func init() { //优先执行该函数
 		log.New(os.Stdout, "\r\n", log.LstdFlags), //将日志打印至标准输出(终端)，分隔符使用回车换行符，日志记录日期和时间
 		ormlog.Config{ //配置ORM日志
 			SlowThreshold: 100 * time.Millisecond, //慢查询的阈值，查询时间超过100毫秒就被视为慢查询，慢查询指的是在数据库中执行时间较长的查询操作，慢查询在日志中会有特殊的标记
-			LogLevel:      ormlog.Info,            //ORM日志级别
+			LogLevel:      ormlog.Error,           //ORM日志级别
 			Colorful:      true,                   //日志显示彩色
 		},
 	)

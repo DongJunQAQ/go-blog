@@ -6,10 +6,13 @@ import (
 	"GoBlog/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"io"
 	"net/http"
 )
 
 func main() {
+	gin.SetMode(gin.ReleaseMode)   //将Gin设置为发布模式，会减少日志输出以提高性能
+	gin.DefaultWriter = io.Discard //不打印任何日志
 	router := gin.Default()
 	router.Use(middleware.Metric())                 //全局中间件，每个handler执行之前都会执行该中间件
 	router.GET("/metrics", func(ctx *gin.Context) { //该路由用来暴露Prometheus的指标数据
