@@ -39,6 +39,8 @@ sonarqube-vulnerability-report:
   tags:
     - goblog
   script:
+    - sed -i 's#https\?://dl-cdn.alpinelinux.org/alpine#https://mirrors.tuna.tsinghua.edu.cn/alpine#g' /etc/apk/repositories
+    - apk update
     - apk add --no-cache curl
     - 'curl -u "${SONAR_TOKEN}:" "${SONAR_HOST_URL}/api/issues/gitlab_sast_export?projectKey=devops_blog_e69f4668-3c61-4468-8d50-6b1aa89595d3&branch=${CI_COMMIT_BRANCH}&pullRequest=${CI_MERGE_REQUEST_IID}" -o gl-sast-sonar-report.json'
   allow_failure: true
