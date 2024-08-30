@@ -12,9 +12,9 @@ stages:
 
 sonarqube-check:
   stage: sonarqube-check
-  dependencies:
-    - get-binaries
-    - build
+  #dependencies:
+    #- get-binaries
+    #- build
   cache:
     policy: pull
     key: "${CI_COMMIT_SHORT_SHA}"
