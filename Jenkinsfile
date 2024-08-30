@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Pull Code') {
             steps {
-                git credentialsId: 'gitlab_auth', url: 'http://192.168.246.152:8081/devops/blog.git'
+                git branch: 'main', credentialsId: 'gitlab_auth', url: 'http://192.168.246.152:8081/devops/blog.git'
             }
         }
         stage('Build And Push Docker Image') {
