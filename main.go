@@ -29,7 +29,7 @@ func main() {
 	router.GET("/blog/:bid", middleware.Auth, handler.BlogDetailHandler)    //中间件就是在处理程序之前需要执行的handler
 	router.POST("/blog/update", middleware.Auth, handler.UpdateBlogHandler)
 	router.GET("/live", func(ctx *gin.Context) {
-		ctx.JSON(http.StatusOK, gin.H{"msg": "oookkk1234"})
+		ctx.JSON(http.StatusOK, gin.H{"msg": "oookkk12345"})
 	})
 	err := router.Run(":8080")
 	if err != nil {
