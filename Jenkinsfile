@@ -17,5 +17,12 @@ pipeline {
                 }
             }
         }
+        stage('Deploy Remote Server') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'harbor_auth', passwordVariable: 'password', usernameVariable: 'username')]) {
+                    sshPublisher(publishers: [sshPublisherDesc(configName: 'deploy', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'sh ./script/deploy.sh $password', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'script', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'deploy.sh')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+                }
+            }
+        }
     }
 }
