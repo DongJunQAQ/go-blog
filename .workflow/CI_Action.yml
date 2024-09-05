@@ -35,10 +35,10 @@ stages:
           retry: '0'
       - step: build@docker
         name: build_docker
-        displayName: 镜像构建
+        displayName: 构建Docker镜像
         type: cert
         certificate: 7c041d40-4db4-013d-e6e7-3e3dc62a28bf
-        tag: ${GITEE_PIPELINE_BUILD_NUMBER}
+        tag: go-blog:v1.${GITEE_PIPELINE_BUILD_NUMBER}
         dockerfile: ./Dockerfile
         context: ''
         artifacts: []
