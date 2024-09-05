@@ -23,10 +23,11 @@ stages:
           - export GOPROXY=https://goproxy.cn,direct
           - '# 输入你的构建命令'
           - go mod download
+          - go build -v -o myapp main.go
         artifacts:
           - name: BUILD_ARTIFACT
             path:
-              - ./output
+              - ./myapp
         caches:
           - /go/pkg/mod
         notify: []
