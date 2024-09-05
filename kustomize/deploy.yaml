@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: blog
+  name: blog
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blog
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: blog
+    spec:
+      volumes:
+      - name: host-time  # 将容器中的时间与宿主机一致
+        hostPath:
+          path: /etc/localtime
+          type: ''
+      containers:
+      - image: registry.cn-hangzhou.aliyuncs.com/dongjun11/go-blog:latest
+        name: blog
+        imagePullPolicy: IfNotPresent
+        resources: {}
+        volumeMounts:
+        - name: host-time
+          mountPath: /etc/localtime
+status: {}
