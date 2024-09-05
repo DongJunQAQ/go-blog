@@ -1,0 +1,50 @@
+version: '1.0'
+name: CI_Action
+displayName: CI_Action
+triggers:
+  trigger: auto
+  push:
+    branches:
+      prefix:
+        - ''
+stages:
+  - name: stage-677ecdc1
+    displayName: CI流水线
+    strategy: naturally
+    trigger: auto
+    executor: []
+    steps:
+      - step: build@golang
+        name: build_golang
+        displayName: Golang 构建
+        golangVersion: '1.22'
+        commands:
+          - '# 默认使用goproxy.cn'
+          - export GOPROXY=https://goproxy.cn,direct
+          - '# 输入你的构建命令'
+          - go mod download
+        artifacts:
+          - name: BUILD_ARTIFACT
+            path:
+              - ./output
+        caches:
+          - /go/pkg/mod
+        notify: []
+        strategy:
+          retry: '0'
+      - step: build@docker
+        name: build_docker
+        displayName: 镜像构建
+        type: account
+        repository: registry.cn-hangzhou.aliyuncs.com
+        username: aliyun2323862297
+        password: zdj7900802
+        tag: ${GITEE_PIPELINE_BUILD_NUMBER}
+        dockerfile: ./Dockerfile
+        context: ''
+        artifacts: []
+        isCache: false
+        parameter: {}
+        notify: []
+        strategy:
+          retry: '0'
