@@ -1,4 +1,4 @@
-FROM golang:1.22
+FROM registry.cn-hangzhou.aliyuncs.com/dongjun11/golang:1.22
 WORKDIR /usr/src/app
 ENV GOPROXY=https://goproxy.cn,direct
 COPY go.mod go.sum ./
